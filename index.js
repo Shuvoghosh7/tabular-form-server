@@ -16,6 +16,7 @@ async function run() {
         await client.connect();
         const personalDetailsCollection = client.db('applicationProcess').collection('personalDetails');
         const businessDetailsCollection = client.db('applicationProcess').collection('businessDetails');
+        const loanDetailsCollection = client.db('applicationProcess').collection('loanDetails');
        
         //get personal Details
         app.get('/get-personalDetails', async (req, res) => {
@@ -42,6 +43,19 @@ async function run() {
          app.post('/add-Businessdetails', async (req, res) => {
             const information = req.body
             const result = await businessDetailsCollection.insertOne(information)
+            res.send(result)
+        });
+        //get Loan Application details 
+        app.get('/get-LoanDetails', async (req, res) => {
+            const query = {};
+            const cursor = loanDetailsCollection .find(query);
+            const LoanDetails = await cursor.toArray();
+            res.send(LoanDetails);
+        })
+         // add Loan Application details
+         app.post('/add-LoanDetails', async (req, res) => {
+            const information = req.body
+            const result = await loanDetailsCollection .insertOne(information)
             res.send(result)
         });
     }
