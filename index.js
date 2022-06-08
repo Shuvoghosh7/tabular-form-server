@@ -15,19 +15,33 @@ async function run() {
     try {
         await client.connect();
         const personalDetailsCollection = client.db('applicationProcess').collection('personalDetails');
-        console.log("i amm conn")
-
+        const businessDetailsCollection = client.db('applicationProcess').collection('businessDetails');
+       
+        //get personal Details
         app.get('/get-personalDetails', async (req, res) => {
             const query = {};
             const cursor = personalDetailsCollection.find(query);
-            const services = await cursor.toArray();
-            res.send(services);
+            const result = await cursor.toArray();
+            res.send(result);
         })
 
-        // add persona lDetails
+        // add personal Details
         app.post('/add-personalDetails', async (req, res) => {
-            const parts = req.body
-            const result = await personalDetailsCollection.insertOne(parts)
+            const information = req.body
+            const result = await personalDetailsCollection.insertOne(information)
+            res.send(result)
+        });
+        //get Business details
+        app.get('/get-Businessdetails', async (req, res) => {
+            const query = {};
+            const cursor = businessDetailsCollection.find(query);
+            const Businessdetails = await cursor.toArray();
+            res.send(Businessdetails);
+        })
+         // add Business Details
+         app.post('/add-Businessdetails', async (req, res) => {
+            const information = req.body
+            const result = await businessDetailsCollection.insertOne(information)
             res.send(result)
         });
     }
